@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP32 LED Control</title>
+</head>
+<body>
+
+  <h1>ESP32 LED Control</h1>
+  <button id="onBtn">Turn ON</button>
+  <button id="offBtn">Turn OFF</button>
+
+  <script type="module">
+
+    // Import Firebase modules
+    import { initializeApp } 
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+    import { getDatabase, ref, set } 
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKKndsZ_aGzNdvED_yoNjLKIgIN2vhkpc",
+      authDomain: "dipthen-fb56b.firebaseapp.com",
+      databaseURL: "https://dipthen-fb56b-default-rtdb.firebaseio.com",
+      projectId: "dipthen-fb56b",
+      storageBucket: "dipthen-fb56b.firebasestorage.app",
+      messagingSenderId: "225383723586",
+      appId: "1:225383723586:web:1092a517c7759ec7e533db",
+      measurementId: "G-ML8N9FYKX0"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Button events
+    document.getElementById("onBtn").onclick = () => {
+      set(ref(database, "led"), "ON");
+    };
+
+    document.getElementById("offBtn").onclick = () => {
+      set(ref(database, "led"), "OFF");
+    };
+
+  </script>
+
+</body>
+</html>

@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ESP32 LED Control</title>
+  <title>Smart Irrigation</title>
 </head>
 <body>
 
-  <h1>ESP32 LED Control</h1>
-  <button id="onBtn">Turn ON</button>
-  <button id="offBtn">Turn OFF</button>
+<h1>Smart Irrigation System</h1>
 
-  <script type="module">
+<h2>Soil Moisture: <span id="moisture">Loading...</span>%</h2>
 
-    // Import Firebase modules
-    import { initializeApp } 
-      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+<button onclick="turnOn()">Motor ON</button>
+<button onclick="turnOff()">Motor OFF</button>
 
-    import { getDatabase, ref, set } 
-      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<script type="module">
 
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyCKKndsZ_aGzNdvED_yoNjLKIgIN2vhkpc",
-      authDomain: "dipthen-fb56b.firebaseapp.com",
-      databaseURL: "https://dipthen-fb56b-default-rtdb.firebaseio.com",
-      projectId: "dipthen-fb56b",
-      storageBucket: "dipthen-fb56b.firebasestorage.app",
-      messagingSenderId: "225383723586",
-      appId: "1:225383723586:web:1092a517c7759ec7e533db",
-      measurementId: "G-ML8N9FYKX0"
-    };
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "dipthen-fb56b.firebaseapp.com",
+  databaseURL: "https://dipthen-fb56b-default-rtdb.firebaseio.com",
+  projectId: "dipthen-fb56b",
+  storageBucket: "dipthen-fb56b.firebasestorage.app",
+  messagingSenderId: "225383723586",
+  appId: "1:225383723586:web:15e000717e1dfd8be533db"
+};
 
-    // Button events
-    document.getElementById("onBtn").onclick = () => {
-      set(ref(database, "led"), "ON");
-    };
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
-    document.getElementById("offBtn").onclick = () => {
-      set(ref(database, "led"), "OFF");
-    };
+// Read Soil Moisture
+const moistureRef = ref(database, 'soilMoisture');
+onValue(moistureRef, (snapshot) => {
+  document.getElementById("moisture").innerText = snapshot.val();
+});
 
-  </script>
+// Motor Control
+window.turnOn = function() {
+  set(ref(database, 'motorStatus'), "ON");
+}
+
+window.turnOff = function() {
+  set(ref(database, 'motorStatus'), "OFF");
+}
+
+</script>
 
 </body>
 </html>
